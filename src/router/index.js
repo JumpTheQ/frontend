@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import useAuthStore from '@/stores/auth'
 
 import CreateApplication from '../views/CreateApplication.vue'
 import HomeView from '../views/HomeView.vue'
@@ -34,12 +34,20 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const nextRouteRequiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-  const { isAuthenticated } = useAuthStore()
+  const { user, isAuthenticated } = useAuthStore()
+
+  // TODO: Check for user info and redirect to respective page if missing
 
   if (nextRouteRequiresAuth && !isAuthenticated) {
     next({ name: 'login' })
-  } else {
-    next()
+  } else if (to.name !== 'login') {
+    const { about, ambitions } = user || {}
+
+    if (!about) next({ name: 'home', query: { section: 'about' } })
+    if (!ambitions) next({ name: 'home', query: { section: 'ambitions' } })
+
+    if (to.name !== 'create-application') next({ name: 'create-application' })
+    else next()
   }
 })
 

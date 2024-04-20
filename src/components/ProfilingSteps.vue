@@ -21,8 +21,8 @@
             text
             @click="nextCallback"
           />
+          <!-- :disabled="!userInput" -->
           <Button
-            :disabled="!userInput"
             :label="nextButtonText"
             @click="() => onNextButtonClick(step.id)"
           />
@@ -35,12 +35,16 @@
 <script setup>
 import { computed, ref } from 'vue';
 
+import useAuthStore from '@/stores/auth';
+
 import Button from 'primevue/button';
 
 import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
 
 import OnboardingSection from './OnboardingSection.vue';
+
+const { user, updateUserData } = useAuthStore();
 
 // State
 
@@ -109,7 +113,12 @@ const steps = computed(() => [
 // Methods
 
 const submitData = () => {
-  console.log('Submit Data', payload.value);
+  const data = {
+    userId: user.id,
+    ...payload.value
+  };
+
+  updateUserData(data);
 };
 
 const onNextButtonClick = (stepId) => {

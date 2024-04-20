@@ -10,8 +10,14 @@
 </template>
 
 <script setup>
-import authAxios from '@/shared/axios/auth-axios';
 import { onMounted, onBeforeMount, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+import authAxios from '@/shared/axios/auth-axios';
+import useAuthStore from '@/stores/auth';
+
+const router = useRouter();
+const store = useAuthStore();
 
 import Button from 'primevue/button';
 
@@ -26,10 +32,9 @@ onBeforeMount(() => {
 
     authAxios.post('/auth/linkedin/callback', { code })
       .then(async () => {
-        const response = await authAxios.get('/auth/me');
+        await store.fetchUserData();
 
-        console.log(response);
-        // TODO: store user
+        router.push('/');
       })
   }
 });

@@ -11,6 +11,7 @@
         <Textarea
           v-model="value"
           rows="8"
+          @keyup.shift.enter.prevent="fireNextStepEvent"
         />
       </template>
     </Card>
@@ -48,6 +49,8 @@ const value = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value)
 });
+
+const fireNextStepEvent = () => { };
 </script>
 
 <style lang="scss">
