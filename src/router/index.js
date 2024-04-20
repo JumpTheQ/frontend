@@ -13,7 +13,6 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        layout: 'default',
         requiresAuth: true
       }
     },
@@ -22,17 +21,13 @@ const router = createRouter({
       name: 'new-application',
       component: NewApplication,
       meta: {
-        layout: 'dashboard',
         requiresAuth: true
       }
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginPage,
-      meta: {
-        layout: 'default'
-      }
+      component: LoginPage
     }
   ]
 })
@@ -46,6 +41,7 @@ router.beforeEach((to, from, next) => {
   if (nextRouteRequiresAuth && !isAuthenticated) {
     next({ name: 'login' })
   } else if (to.name !== 'login') {
+    console.log(to.name, isAuthenticated, user)
     const { about, ambitions } = user || {}
 
     if (!about) next({ name: 'home', query: { section: 'about' } })
@@ -53,6 +49,8 @@ router.beforeEach((to, from, next) => {
 
     if (to.name !== 'new-application') next({ name: 'new-application' })
     else next()
+  } else {
+    next()
   }
 })
 

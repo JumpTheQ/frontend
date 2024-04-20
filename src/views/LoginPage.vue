@@ -16,6 +16,8 @@ import { useRouter } from 'vue-router';
 import authAxios from '@/shared/axios/auth-axios';
 import useAuthStore from '@/stores/auth';
 
+// import DefaultLayout from '@/layouts/DefaultLayout.vue';
+
 const router = useRouter();
 const store = useAuthStore();
 

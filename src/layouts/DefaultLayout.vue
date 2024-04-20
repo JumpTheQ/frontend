@@ -13,17 +13,11 @@ import NavigationBar from '@/components/NavigationBar.vue';
 
 <style lang="scss" scoped>
 .onboarding-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: repeat(2, max-content);
-  grid-template-areas: 'navbar' 'content';
+  display: flex;
+  // display: grid;
+  // grid-template-columns: 1fr;
+  // grid-template-rows: repeat(2, max-content);
+  // grid-template-areas: 'navbar' 'content';
 
-  &__content {
-    grid-area: content;
-  }
-
-  &__navbar {
-    grid-area: navbar;
-  }
 }
 </style>

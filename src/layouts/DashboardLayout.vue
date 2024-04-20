@@ -16,7 +16,7 @@ import DashboardSidebar from '@/components/DashboardSidebar.vue';
 
 <style lang="scss" scoped>
 .dashboard-layout {
-  @apply flex flex-col;
+  @apply flex flex-col gap-4;
 
   &__content {
     grid-area: content;

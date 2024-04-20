@@ -1,25 +1,24 @@
 <template>
-  <component :is="layout">
-    <RouterView />
-  </component>
+  <RouterView />
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue';
-import { RouterView, useRoute } from 'vue-router'
+import { onMounted } from 'vue';
+import { RouterView } from 'vue-router'
 
 import authAxios from './shared/axios/auth-axios';
 
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import DefaultLayout from '@/layouts/DefaultLayout.vue';
+// import DashboardLayout from '@/layouts/DashboardLayout.vue';
+// import DefaultLayout from '@/layouts/DefaultLayout.vue';
 
-const route = useRoute();
+// const route = useRoute();
 
 // Computed
 
-const isDashboardLayout = computed(() => route.meta.layout === 'dashboard');
+// const isDashboardLayout = computed(() => route.meta.layout === 'dashboard');
 
-const layout = computed(() => isDashboardLayout.value ? DashboardLayout : DefaultLayout);
+// const layout = computed(() => isDashboardLayout.value ? DashboardLayout : DefaultLayout);
+
 // Lifecycle hooks
 
 onMounted(() => {

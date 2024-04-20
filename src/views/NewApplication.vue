@@ -1,5 +1,5 @@
 <template>
-  <div class="new-application">
+  <DefaultLayout class="new-application">
     <h1>New application</h1>
 
     <label for="">Position</label>
@@ -11,13 +11,15 @@
       label="Create application"
       @click="submitApplication"
     />
-  </div>
+  </DefaultLayout>
 </template>
 
 <script setup>
 import { computed, ref } from 'vue';
 
 import useApplicationsStore from '@/stores/applications';
+
+import DefaultLayout from '@/layouts/DefaultLayout.vue';
 
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -46,8 +48,6 @@ const submitApplication = () => {
 
   createApplication(payload.value);
 }
-
-
 </script>
 
 <style lang="scss" scoped>
