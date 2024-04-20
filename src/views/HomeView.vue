@@ -13,6 +13,6 @@ import ProfilingSteps from '@/components/ProfilingSteps.vue';
 
 <style lang="scss">
 .app__content {
-  @apply container mx-auto;
+  @apply container mx-auto mt-16;
 }
 </style>
