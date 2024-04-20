@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import useAuthStore from '@/stores/auth'
 
-import CreateApplication from '../views/CreateApplication.vue'
+import NewApplication from '../views/NewApplication.vue'
 import HomeView from '../views/HomeView.vue'
 import LoginPage from '../views/LoginPage.vue'
 
@@ -13,21 +13,26 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
+        layout: 'default',
         requiresAuth: true
       }
     },
     {
-      path: '/create-application',
-      name: 'create-application',
-      component: CreateApplication,
+      path: '/new-application',
+      name: 'new-application',
+      component: NewApplication,
       meta: {
+        layout: 'dashboard',
         requiresAuth: true
       }
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginPage
+      component: LoginPage,
+      meta: {
+        layout: 'default'
+      }
     }
   ]
 })
@@ -46,7 +51,7 @@ router.beforeEach((to, from, next) => {
     if (!about) next({ name: 'home', query: { section: 'about' } })
     if (!ambitions) next({ name: 'home', query: { section: 'ambitions' } })
 
-    if (to.name !== 'create-application') next({ name: 'create-application' })
+    if (to.name !== 'new-application') next({ name: 'new-application' })
     else next()
   }
 })

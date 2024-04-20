@@ -1,7 +1,5 @@
 <template>
-  <NavigationBar class="app_navbar" />
   <div class="create-application">
-    <DashboardSidebar />
     <div class="create-application__content">
       <Card>
         <template #title>
