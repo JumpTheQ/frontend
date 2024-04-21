@@ -40,11 +40,11 @@ router.beforeEach((to) => {
 
   if (!isAuthenticated && to.name !== 'login') {
     return { name: 'login' }
-  } else {
+  } else if (isAuthenticated) {
     const { about, ambitions } = user || {}
 
-    if (!about) return { name: 'onboarding', query: { section: 'about' } }
-    if (!ambitions) return { name: 'onboarding', query: { section: 'ambitions' } }
+    if (!about && to.name !== 'onboarding' && !to.query.section !== 'about') return { name: 'onboarding', query: { section: 'about' } }
+    if (!ambitions  && to.name !== 'onboarding' && !to.query.section !== 'ambitions') return { name: 'onboarding', query: { section: 'ambitions' } }
   }
 })
 

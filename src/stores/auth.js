@@ -42,8 +42,8 @@ export default defineStore('auth', {
 
       if (!Object.keys(data).length) return
 
-      authAxios.patch(`/user/${userId}`, data).then(({ data }) => {
-        this.storeUser(data)
+      authAxios.patch(`/user/${userId}`, data).then(({ data: responseData }) => {
+        this.storeUser(responseData.data)
       })
     },
 
