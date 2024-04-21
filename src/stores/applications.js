@@ -38,7 +38,6 @@ export default defineStore('applications', {
     },
 
     fetchApplication(id) {
-      console.log('fetching application')
       authAxios.get(`application/${id}`).then(({ data: responseData }) => {
         const { data } = responseData || {}
 
@@ -71,7 +70,6 @@ export default defineStore('applications', {
       const { applicationId, resumeId } = payload || {}
 
       authAxios.get(`application/${applicationId}/resume/${resumeId}`).then(({ data }) => {
-        console.log(data)
         this.records[applicationId].resume.rendered = data
       })
     },

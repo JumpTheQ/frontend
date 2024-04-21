@@ -122,7 +122,6 @@ const submitData = () => {
 };
 
 const onNextButtonClick = (stepId) => {
-  console.log(stepId, isLastStep.value)
   if (isLastStep.value) {
     submitData();
     return;
