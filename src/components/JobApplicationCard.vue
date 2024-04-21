@@ -6,7 +6,7 @@
           Job Application
         </h3>
         <p class="job-application-card__name">
-          {{ name }}
+          {{ application.name }}
         </p>
       </div>
       <Button
@@ -25,7 +25,7 @@
           Description
         </h4>
         <p class="job-application-card__insights">
-          {{ description }}
+          {{ application.description }}
         </p>
       </div>
       <div class="job-application-card__content-divider" />
@@ -33,9 +33,13 @@
         <h4 class="job-application-card__content-title">
           Personalized Insights
         </h4>
-        <p class="job-application-card__insights">
-          {{ insights }}
-        </p>
+        <div class="job-application-card__insights">
+          Based on your experience and skills, we decided to highlight the following topics on your CV and Motivation Letter:
+
+          <ul class="list-disc my-4 mx-8">
+            <li v-for="(keyword, index) of application.keywords" :key="index">{{ keyword }}</li>
+          </ul>
+        </div>
       </div>
     </template>
   </Card>
@@ -48,19 +52,9 @@ import Button from 'primevue/button';
 import Card from 'primevue/card';
 
 defineProps({
-  description: {
-    default: null,
-    type: String
-  },
-
-  insights: {
-    default: null,
-    type: String
-  },
-
-  name: {
-    default: null,
-    type: String
+  application: {
+    default: () => {},
+    type: Object
   }
 });
 

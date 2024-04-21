@@ -3,9 +3,7 @@
     <div class="application-results__results">
       <JobApplicationCard
         v-if="application"
-        :description="application.description"
-        :name="application.name"
-        insights="lore ipsum, dolor sit amet consectetur adipisicing elit. Quibusdam voluptas tempore magnam doloribus ab libero recusandae facilis ad facere quam soluta dolorem quisquam quia pariatur consectetur illum reiciendis, maxime suscipit."
+        :application="application"
       />
       <div class="application-results__display">
         <TabMenu
@@ -155,7 +153,7 @@ onMounted(() => {
   // .application-results__display-header
   &__display-header {
 
-    // .application-results__display-header .p-tabmenu-nav	
+    // .application-results__display-header .p-tabmenu-nav
     .p-tabmenu-nav {
       background-color: transparent;
       border-bottom: 2px solid $color-secondary;
