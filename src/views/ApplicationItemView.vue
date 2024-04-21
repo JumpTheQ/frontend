@@ -18,14 +18,12 @@
             the chat. You may also use the chat to update the entire Motivation Letter.
           </p>
           <div class="application-results__display-subheader-actions">
-            <Button
-              class="application-results__display-subheader-action"
-              icon="pi pi-search"
-            />
-            <Button
-              class="application-results__display-subheader-action"
-              icon="pi pi-download"
-            />
+            <a :href="downloadUrl" target="_blank">
+              <Button
+                class="application-results__display-subheader-action"
+                icon="pi pi-download"
+              />
+            </a>
           </div>
         </div>
         <ResumeCard
@@ -64,6 +62,8 @@ import CoverLetterCard from '@/components/CoverLetterCard.vue';
 import ChatWindow from '@/components/ChatWindow.vue';
 import JobApplicationCard from '@/components/JobApplicationCard.vue';
 import ResumeCard from '@/components/ResumeCard.vue';
+import authAxios from '@/shared/axios/auth-axios.js'
+import config from '@/config.js'
 
 // Store
 
@@ -108,6 +108,12 @@ const promptable = computed(() => {
     type: isCvTabActive.value ? 'App\\Models\\Resume' : 'App\\Models\\CoverLetter'
   }
 });
+
+const downloadUrl = computed(() => {
+  const fileType = isCvTabActive.value ? 'resume' : 'coverLetter'
+  const fileId = isCvTabActive.value ? resumeId.value : coverLetterId.value
+  return `${config.backendUrl}/application/${applicationId.value}/${fileType}/${fileId}/download`
+})
 
 // Methods
 
