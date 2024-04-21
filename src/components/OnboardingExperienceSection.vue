@@ -243,7 +243,7 @@ const expandSubSection = (subSectionId) => {
   // .onboarding-experience-section__sub-section-header
   &__sub-section-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     width: 100%;
   }

@@ -23,7 +23,7 @@ import DashboardSidebar from '@/components/DashboardSidebar.vue';
 
   &__content {
     grid-area: content;
-    padding-right: 24px;
+    padding-right: 16px;
     overflow-y: auto;
     height: calc(100vh - 82px);
   }

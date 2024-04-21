@@ -6,14 +6,16 @@
         :key="`sidebar-action-${index}`"
         class="dashboard-sidebar__action"
       >
-        <Button
-          link
-          class="dashboard-sidebar__action-button"
-          :class="{
-            'dashboard-sidebar__action-button--active': action.active
-          }"
-          :label="action.label"
-        />
+        <router-link :to="action.to" ex>
+          <Button
+            class="dashboard-sidebar__action-button"
+            :class="{
+              'dashboard-sidebar__action-button--active': action.active
+            }"
+            :icon="action.icon"
+            :label="action.label"
+          />
+        </router-link>
       </li>
     </ul>
   </div>
@@ -21,29 +23,25 @@
 
 <script setup>
 import Button from 'primevue/button';
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 
-const actions = [
+const route = useRoute();
+
+const actions = computed(() => [
   {
-    active: true,
+    active: route.name !== 'profile',
     icon: 'pi pi-briefcase',
     label: 'Applications',
-    to: '/dashboard'
+    to: '/'
   },
   {
-    active: false,
+    active: route.name === 'profile',
     icon: 'pi pi-user',
     label: 'Profile',
-    // to: '/profile'
-    to: '/dashboard'
-  },
-  {
-    active: false,
-    icon: 'pi pi-cog',
-    label: 'Settings',
-    to: '/dashboard'
-    // to: '/settings'
+    to: '/profile'
   }
-];
+]);
 </script>
 
 <style lang="scss">
@@ -78,7 +76,8 @@ const actions = [
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100px;
+      height: 120px;
+      width: 120px;
 
       font-size: $font-size-lg;
       font-weight: $font-weight-regular;

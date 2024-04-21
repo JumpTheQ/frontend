@@ -7,6 +7,7 @@ import NewApplication from '../views/NewApplication.vue'
 import DashboardView from '../views/DashboardView.vue'
 import OnboardingView from '../views/OnboardingView.vue'
 import LoginView from '../views/LoginView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,7 +26,12 @@ const router = createRouter({
           path: 'application/:id',
           name: 'application',
           component: ApplicationResultsView
-        }
+        },
+        {
+          path: 'profile',
+          name: 'profile',
+          component: ProfileView
+        },
       ]
     },
     {
