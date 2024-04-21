@@ -20,11 +20,12 @@ import DashboardSidebar from '@/components/DashboardSidebar.vue';
   grid-template-columns: max-content 1fr;
   grid-template-rows: repeat(2, max-content);
   grid-template-areas: 'navbar navbar' 'sidebar content';
-  gap: 24px;
 
   &__content {
     grid-area: content;
     padding-right: 24px;
+    overflow-y: auto;
+    height: calc(100vh - 82px);
   }
 
   &__navbar {

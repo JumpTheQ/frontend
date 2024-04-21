@@ -20,7 +20,6 @@
     <template #footer>
       <Textarea
         class="input chat-window__textarea"
-        auto-resize
         v-model="userPrompt"
         placeholder="Type a message and press Shift + Enter to send"
         @keydown.shift.enter.prevent="onPromptSubmit"
@@ -82,7 +81,13 @@ watch(
 
 <style lang="scss">
 .chat-window {
+  position: fixed;
+  margin-right: 16px;
+  height: calc(100vh - 96px);
 
+  .p-card-body, .p-card-content {
+    @apply h-full;
+  }
   // .chat-window__chat-bubble
   &__chat-bubble {
     background-color: $color-primary;
@@ -123,13 +128,13 @@ watch(
   &__conversation {
     width: 100%;
     height: 100%;
-    max-height: 600px;
+    max-height: calc(100vh - 240px);
     overflow-y: scroll;
   }
 
   // .chat-window__textarea
   &__textarea {
-    max-height: 120px;
+    height: 80px;
     resize: none;
   }
 }

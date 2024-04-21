@@ -51,7 +51,7 @@ const actions = [
 .dashboard-sidebar {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0 1rem;
 
   &__actions-list {
     list-style-type: none;
