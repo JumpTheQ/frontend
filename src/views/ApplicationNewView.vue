@@ -33,6 +33,8 @@
       class="button new-application__submit-button"
       icon="pi pi-sparkles"
       label="Create application"
+      :loading="loading"
+      :disabled="loading"
       @click="submitApplication"
     />
   </div>
@@ -61,6 +63,7 @@ const router = useRouter();
 
 const description = ref('');
 const name = ref('');
+const loading = ref(false);
 
 const payload = computed(() => {
   const data = {};
@@ -73,16 +76,17 @@ const payload = computed(() => {
   return data;
 });
 
-const submitApplication = () => {
+const submitApplication = async () => {
   if (!payload.value) return;
+  loading.value = true
 
-  createApplication(payload.value)
-    .then((id) => {
-      description.value = '';
-      name.value = '';
+  const application = await createApplication(payload.value)
 
-      router.push({ name: 'application', params: { id } })
-    });
+  description.value = '';
+  name.value = '';
+  loading.value = false
+
+  router.push({ name: 'application-view', params: { id: application.id } })
 }
 </script>
 

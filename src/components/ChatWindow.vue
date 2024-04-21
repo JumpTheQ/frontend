@@ -19,9 +19,9 @@
             'chat-window__chat-bubble--ai-generated': true,
           }"
         >
-          There were the artifacts I've generated for you fully customized for this job offer! <br>
+          There were the artifacts I've generated for you — fully customized to this job offer! <br>
           <br>
-          Feel free to iterate on top of them!
+          Feel free to iterate on top of them starting now
         </div>
         <div
           v-for="prompt in prompts"

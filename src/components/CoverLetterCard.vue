@@ -78,10 +78,10 @@ const handleContentClick = (event) => {
 
 watch(
   () => props.coverLetterId,
-  (coverLetterId) => {
+  async (coverLetterId) => {
     if (!coverLetterId) return;
 
-    applicationStore.fetchRenderedCoverLetter({
+    await applicationStore.fetchRenderedCoverLetter({
       applicationId: props.applicationId,
       coverLetterId
     });

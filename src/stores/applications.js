@@ -20,23 +20,16 @@ export default defineStore('applications', {
   },
 
   actions: {
-    createApplication(payload) {
-      const { name, description } = payload || {}
-      const data = {}
+    async createApplication(payload) {
+      const { data: response } = await authAxios.post('application', payload )
+      const { data } = response || {}
 
-      if (typeof name !== 'undefined') data.name = name
-      if (typeof description !== 'undefined') data.description = description
+      this.records[data.id] = data
+      this.ids.push(data.id)
 
-      if (!Object.keys(data).length) return
-
-      return authAxios.post('application', data).then(({ data: responseData }) => {
-        const { data } = responseData || {}
-
-        this.records[data.id] = data
-        this.ids.push(data.id)
-
-        return data.id
-      })
+      await this.fetchCoverLetter(data.id)
+      await this.fetchResume(data.id)
+      return data
     },
 
     async fetchApplications() {
@@ -46,56 +39,49 @@ export default defineStore('applications', {
         this.records[record.id] = record
         return record.id
       })
-
-      this.ids.forEach((id) => {
-        this.fetchCoverLetter(id)
-        this.fetchResume(id)
-      })
     },
 
-    fetchApplication(id) {
-      authAxios.get(`application/${id}`).then(({ data: responseData }) => {
-        const { data } = responseData || {}
+    async fetchApplication(id) {
+      const { data: response } = await authAxios.get(`application/${id}`)
+      const { data } = response || {}
+      this.records[id] = data
+      if (!this.ids.includes(id)) this.ids.push(id)
 
-        this.records[id] = data
-        if (!this.ids.includes(id)) this.ids.push(id)
-
-        this.fetchCoverLetter(id)
-        this.fetchResume(id)
-      })
+      await this.fetchCoverLetter(id)
+      await this.fetchResume(id)
     },
 
-    fetchCoverLetter(id) {
-      authAxios.get(`application/${id}/coverLetter`).then(({ data: responseData }) => {
-        const { data } = responseData || {}
+    async fetchCoverLetter(id) {
+      const { data: response } = await authAxios.get(`application/${id}/coverLetter`)
+      const { data } = response || {}
 
-        this.records[id].coverLetter = data
-      })
+      this.records[id].coverLetter = data
+
+      return data
     },
 
-    fetchRenderedCoverLetter(payload) {
+    async fetchRenderedCoverLetter(payload) {
       const { applicationId, coverLetterId } = payload || {}
-      authAxios
+      const { data: response } = await authAxios
         .get(`application/${applicationId}/coverLetter/${coverLetterId}`)
-        .then(({ data }) => {
-          this.records[applicationId].coverLetter.rendered = data
-        })
+
+      this.records[applicationId].coverLetter.rendered = response
     },
 
-    fetchRenderedResume(payload) {
+    async fetchRenderedResume(payload) {
       const { applicationId, resumeId } = payload || {}
 
-      authAxios.get(`application/${applicationId}/resume/${resumeId}`).then(({ data }) => {
-        this.records[applicationId].resume.rendered = data
-      })
+      const { data: response } = await authAxios.get(`application/${applicationId}/resume/${resumeId}`)
+      this.records[applicationId].resume.rendered = response
     },
 
-    fetchResume(id) {
-      authAxios.get(`application/${id}/resume`).then(({ data: responseData }) => {
-        const { data } = responseData || {}
+    async fetchResume(id) {
+      const { data: response } = await authAxios.get(`application/${id}/resume`)
+      const { data } = response || {}
 
-        this.records[id].resume = data
-      })
+      this.records[id].resume = data
+
+      return data
     }
   }
 })
