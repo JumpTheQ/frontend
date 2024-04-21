@@ -16,10 +16,15 @@ import DashboardSidebar from '@/components/DashboardSidebar.vue';
 
 <style lang="scss" scoped>
 .dashboard-layout {
-  @apply flex flex-col gap-4;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: repeat(2, max-content);
+  grid-template-areas: 'navbar navbar' 'sidebar content';
+  gap: 24px;
 
   &__content {
     grid-area: content;
+    padding-right: 24px;
   }
 
   &__navbar {
