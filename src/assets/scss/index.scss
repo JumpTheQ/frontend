@@ -13,3 +13,51 @@ body,
   font-size: $font-size-md;
   background-color: $color-background;
 }
+
+.page-title {
+  margin: 0;
+  color: $color-text;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+}
+
+.label {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
+
+.input.p-inputtext {
+  width: 100%;
+  padding: 10px 16px;
+
+  color: $color-text;
+  font-size: $font-size-md;
+  font-weight: $font-weight-regular;
+
+  border: 1px solid $color-light-gray;
+  border-radius: $base-border-radius;
+  outline: none;
+
+  &::placeholder {
+    color: $color-placeholder;
+  }
+
+  &:focus {
+    border-color: $color-primary;
+  }
+}
+
+.labeled-input > .input {
+  margin-top: 16px;
+}
+
+.button.p-button {
+  max-width: fit-content;
+  padding: 18px 32px;
+  background-color: $color-primary;
+  color: $color-white;
+  border-radius: $base-border-radius;
+
+  font-size: $font-size-lg;
+  font-weight: $font-weight-bold;
+}
