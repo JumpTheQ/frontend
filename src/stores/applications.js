@@ -46,6 +46,11 @@ export default defineStore('applications', {
         this.records[record.id] = record
         return record.id
       })
+
+      this.ids.forEach((id) => {
+        this.fetchCoverLetter(id)
+        this.fetchResume(id)
+      })
     },
 
     fetchApplication(id) {
