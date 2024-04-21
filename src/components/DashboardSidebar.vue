@@ -6,36 +6,48 @@
         :key="`sidebar-action-${index}`"
         class="dashboard-sidebar__action"
       >
-        <span v-if="icon">{{ icon }}</span>
-        {{ action.text }}
+        <Button
+          link
+          class="dashboard-sidebar__action-button"
+          :class="{
+            'dashboard-sidebar__action-button--active': action.active
+          }"
+          :icon="action.icon"
+          :label="action.label"
+        />
       </li>
     </ul>
   </div>
 </template>
 
 <script setup>
+import Button from 'primevue/button';
 
 const actions = [
   {
-    icon: null,
-    text: 'Some Text'
+    active: true,
+    icon: 'pi pi-briefcase',
+    label: 'Applications',
+    to: '/dashboard'
   },
   {
-    icon: null,
-    text: 'Some Text'
+    active: false,
+    icon: 'pi pi-user',
+    label: 'Profile',
+    // to: '/profile'
+    to: '/dashboard'
   },
   {
-    icon: null,
-    text: 'Some Text'
-  },
-  {
-    icon: null,
-    text: 'Some Text'
-  },
+    active: false,
+    icon: 'pi pi-cog',
+    label: 'Settings',
+    to: '/dashboard'
+    // to: '/settings'
+  }
 ];
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .dashboard-sidebar {
   display: flex;
   flex-direction: column;
@@ -51,6 +63,40 @@ const actions = [
     align-items: center;
     justify-self: flex-start;
     gap: 2rem;
+  }
+
+  // .dashboard-sidebar__action-button
+  &__action-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    padding: 8px;
+    border-radius: $base-border-radius;
+
+    .p-button-icon {
+      font-size: 2rem;
+    }
+
+    .p-button-label {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-regular;
+    }
+
+    // .dashboard-sidebar__action-button--active
+    &--active {
+      background-color: $color-secondary;
+
+      .p-button-icon {
+        color: $color-primary;
+      }
+
+      .p-button-label {
+        font-weight: $font-weight-bold;
+      }
+    }
   }
 }
 </style>
