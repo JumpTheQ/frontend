@@ -12,7 +12,6 @@
           :class="{
             'dashboard-sidebar__action-button--active': action.active
           }"
-          :icon="action.icon"
           :label="action.label"
         />
       </li>
@@ -67,12 +66,6 @@ const actions = [
 
   // .dashboard-sidebar__action-button
   &__action-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-
     padding: 8px;
     border-radius: $base-border-radius;
 
@@ -81,6 +74,12 @@ const actions = [
     }
 
     .p-button-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100px;
+
       font-size: $font-size-lg;
       font-weight: $font-weight-regular;
     }
@@ -88,6 +87,7 @@ const actions = [
     // .dashboard-sidebar__action-button--active
     &--active {
       background-color: $color-secondary;
+      @apply rounded-lg;
 
       .p-button-icon {
         color: $color-primary;

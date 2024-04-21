@@ -14,9 +14,8 @@
         />
         <div class="application-results__display-subheader">
           <p class="text application-results__display-subheader-disclaimer">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo nostrum nisi adipisci at iste libero saepe
-            ipsa
-            totam dolores tenetur fuga, illo voluptatum quas dolorum possimus quam ex blanditiis tempora!
+            You may ask for improvements in each section by clicking on it. It will be highlighted on
+            the chat. You may also use the chat to update the entire Motivation Letter.
           </p>
           <div class="application-results__display-subheader-actions">
             <Button
@@ -143,6 +142,7 @@ onMounted(() => {
   // .application-results__display
   &__display {
     margin-top: 64px;
+    margin-bottom: 16px;
   }
 
   // .application-results__display-content

@@ -17,7 +17,7 @@
       <div class="navigation-bar__thumbnail-container">
         <img
           class="navigation-bar__thumbnail"
-          src="@/assets/images/avatar.jpeg"
+          :src="user.avatar_url"
         >
       </div>
     </div>
@@ -26,13 +26,9 @@
 
 <script setup>
 import logo from '@/assets/images/logo.svg';
-// import { ref } from 'vue';
-
-// import IconField from 'primevue/iconfield';
-// import InputText from 'primevue/inputtext';
-
-
-// const searchValue = ref('');
+import useAuthStore from '@/stores/auth'
+const authStore = useAuthStore()
+const { user } = authStore
 </script>
 
 <style lang="scss" scoped>
