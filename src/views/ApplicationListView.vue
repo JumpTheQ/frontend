@@ -2,7 +2,7 @@
   <div class="application-list">
     <div class="flex items-center justify-between mb-6">
       <h3>My Applications</h3>
-      <router-link to="/application/new">
+      <router-link :to="{ name: 'application-new' }">
         <Button
           label="New Application"
           class="button"
