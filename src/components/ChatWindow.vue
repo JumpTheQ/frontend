@@ -57,8 +57,9 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from 'vue'
+import { computed, ref, onMounted, watch, nextTick } from 'vue'
 import usePromptStore from '@/stores/prompt.js'
+import useApplicationsStore from '@/stores/applications.js'
 
 import Card from 'primevue/card';
 import Textarea from 'primevue/textarea';
@@ -76,6 +77,7 @@ const props = defineProps({
 })
 
 const promptStore = usePromptStore()
+const applicationsStore = useApplicationsStore()
 
 // State
 
@@ -97,6 +99,16 @@ const onPromptSubmit = async () => {
   }
 
   await promptStore.createPrompt(props.applicationId, payload)
+  promptStore.setActiveSection(null)
+  userPrompt.value = ''
+
+  if (props.promptable.type === 'App\\Models\\CoverLetter') {
+    await applicationsStore.fetchRenderedCoverLetter(
+      {
+        applicationId: props.applicationId,
+        coverLetterId: props.promptable.id
+      })
+  }
 };
 
 const scrollToBottom = () => {
@@ -114,12 +126,12 @@ onMounted(async () => {
 })
 // Watchers
 
-/* watch(
+watch(
   () => prompts.value,
   () => {
     nextTick(scrollToBottom);
   }
-); */
+);
 </script>
 
 <style lang="scss">

@@ -24,11 +24,8 @@ export default defineStore('prompt', {
 
     async createPrompt(application_id, prompt) {
       const { data: response } = await authAxios.post(`application/${application_id}/prompt`, prompt)
-      this.records[application_id] = response.data
+      this.records[prompt.id] = response.data
       this.ids.push(response.data.id)
-      if (!this.activeSection) {
-        this.activeSection = null
-      }
     },
 
     setActiveSection(activeSection) {
