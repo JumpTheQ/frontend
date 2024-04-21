@@ -11,6 +11,13 @@
     >
       <template #content="{ nextCallback }">
         <component
+          v-if="step.id === 'experience'"
+          :is="step.content.component"
+          v-bind="step.content.props"
+          v-model="experiencesInput"
+        />
+        <component
+          v-else
           :is="step.content.component"
           v-bind="step.content.props"
           v-model="userInput"
@@ -21,7 +28,6 @@
             text
             @click="nextCallback"
           />
-          <!-- :disabled="!userInput" -->
           <Button
             :label="nextButtonText"
             @click="() => onNextButtonClick(step.id)"
@@ -53,8 +59,14 @@ const activeStep = ref(0);
 
 const aboutYouText = ref('');
 const ambitionsText = ref('');
+const experiences = ref([]);
+const courses = ref([]);
+const languages = ref([]);
+const skills = ref([]);
 
-const userInput = ref('');;
+const userInput = ref('');
+
+const experiencesInput = ref({});
 
 // Computed
 
@@ -68,7 +80,12 @@ const payload = computed(() => {
 
   if (aboutYouText.value) data.about = aboutYouText.value;
   if (ambitionsText.value) data.ambitions = ambitionsText.value;
+  if (experiences.value.length) data.experiences = experiences.value;
+  if (courses.value.length) data.courses = courses.value;
+  if (languages.value.length) data.languages = languages.value;
+  if (skills.value.length) data.skills = skills.value;
 
+  console.log({ data, experiences: experiences.value })
   if (Object.keys(data).length === 0) return null;
 
   return data;
@@ -124,6 +141,23 @@ const submitData = () => {
 
 const onNextButtonClick = (stepId) => {
   if (isLastStep.value) {
+
+    if (Array.isArray(experiencesInput.value.experiences) && experiencesInput.value.experiences.length) {
+      experiences.value = experiencesInput.value.experiences;
+    }
+
+    if (Array.isArray(experiencesInput.value.courses) && experiencesInput.value.courses.length) {
+      courses.value = experiencesInput.value.courses;
+    }
+
+    if (Array.isArray(experiencesInput.value.languages) && experiencesInput.value.languages.length) {
+      languages.value = experiencesInput.value.languages;
+    }
+
+    if (Array.isArray(experiencesInput.value.skills) && experiencesInput.value.skills.length) {
+      skills.value = experiencesInput.value.skills;
+    }
+
     submitData();
     return;
   }

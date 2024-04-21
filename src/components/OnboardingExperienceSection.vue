@@ -32,29 +32,34 @@
           </label>
           <InputText
             v-if="field.type === 'text'"
-            v-model="model"
+            v-model="dataModel[subSection.id][field.id]"
             class="input"
             :id="field.id"
+            @blur="onBlur"
           />
           <Calendar
             v-else-if="field.type === 'calendar'"
             class="input"
-            v-model="model"
+            v-model="dataModel[subSection.id][field.id]"
             :id="field.id"
+            @blur="onBlur"
           />
           <Textarea
             v-else-if="field.type === 'textarea'"
             class="input onboarding-experience-section__textarea"
-            v-model="model"
+            v-model="dataModel[subSection.id][field.id]"
             :id="field.id"
+            @blur="onBlur"
           />
           <Dropdown
             v-else-if="field.type === 'select'"
             class="input"
-            v-model="model"
+            v-model="dataModel[subSection.id][field.id]"
             option-label="label"
+            option-value="value"
             :options="field.options"
             :id="field.id"
+            @blur="onBlur"
           />
           <div
             v-else-if="field.type === 'tagsInput'"
@@ -62,16 +67,20 @@
           >
             <div class="onboarding-experience-section__tags-list">
               <Tag
+                v-for="tag in modelValue.skills"
+                :key="tag"
                 class="onboarding-experience-section__tag"
-                value="Fontend"
+                :value="tag"
               />
             </div>
             <InputText
               class="input"
-              v-model="model"
+              :value="dataModel[skills]"
               option-label="label"
               :options="field.options"
               :id="field.id"
+              placeholder="Skill 1, Skill 2, Skill 3..."
+              @blur="onTagBlur"
             />
           </div>
         </div>
@@ -91,23 +100,52 @@ import Textarea from 'primevue/textarea';
 import Tag from 'primevue/tag';
 
 
+defineProps({
+  modelValue: {
+    default: null,
+    type: Object
+  }
+});
+
+const emit = defineEmits(['update:modelValue']);
+
 // State
 
 const expandedSubSectionId = ref(null);
 
-const model = ref('');
+const dataModel = ref({
+  experiences: {
+    companyName: '',
+    description: '',
+    endDate: '',
+    startDate: '',
+    title: ''
+  },
+  courses: {
+    description: '',
+    endDate: '',
+    institution: '',
+    name: '',
+    startDate: ''
+  },
+  skills: [],
+  languages: {
+    name: '',
+    level: ''
+  }
+});
 
 const subSections = ref({
-  experience: {
+  experiences: {
     fields: [
       {
         label: 'Job title',
-        id: 'job',
+        id: 'title',
         type: 'text'
       },
       {
         label: 'Company',
-        id: 'company',
+        id: 'companyName',
         type: 'text'
       },
       {
@@ -127,20 +165,15 @@ const subSections = ref({
         type: 'textarea'
       }
     ],
-    id: 'experience',
+    id: 'experiences',
     title: 'Experience',
   },
-  education: {
+  courses: {
     fields: [
       {
-        label: 'Degree',
-        id: 'degree',
-        options: [
-          { label: 'Bachelor', value: 'bachelor' },
-          { label: 'Master', value: 'master' },
-          { label: 'PhD', value: 'phd' }
-        ],
-        type: 'select'
+        label: 'Course',
+        id: 'name',
+        type: 'text'
       },
       {
         label: 'Institution',
@@ -151,15 +184,26 @@ const subSections = ref({
         label: 'Start Date',
         id: 'startDate',
         type: 'calendar'
+      },
+      {
+        label: 'End Date',
+        id: 'endDate',
+        type: 'calendar'
+      },
+      {
+        label: 'Description',
+        id: 'description',
+        size: 'large',
+        type: 'textarea'
       }
     ],
-    id: 'education',
+    id: 'courses',
     title: 'Education',
   },
   skills: {
     fields: [
       {
-        name: 'tags',
+        name: 'skills',
         id: 'skills',
         size: 'large',
         type: 'tagsInput'
@@ -171,16 +215,56 @@ const subSections = ref({
   languages: {
     fields: [
       {
-        name: 'tags',
-        id: 'skills',
-        size: 'large',
-        type: 'tagsInput'
+        label: 'Language',
+        id: 'name',
+        type: 'text'
+      },
+      {
+        label: 'Level',
+        id: 'level',
+        options: [
+          { label: 'Beginner', value: 'beginner' },
+          { label: 'Intermediate', value: 'intermediate' },
+          { label: 'Advanced', value: 'advanced' }
+        ],
+        type: 'select',
       }
     ],
     id: 'languages',
     title: 'Languages',
   }
 })
+
+// Computed
+
+const onTagBlur = (event) => {
+  const { value } = event.target;
+
+  const tags = value.split(',');
+
+  dataModel.value.skills = tags.map(tag => tag.trim())
+    .filter(Boolean);
+
+  return onBlur();
+}
+
+const onBlur = () => {
+  const data = {};
+
+  for (const subSectionId in dataModel.value) {
+    if (!data[subSectionId]) data[subSectionId] = [];
+
+    if (Array.isArray(dataModel.value[subSectionId])) {
+      data[subSectionId] = dataModel.value[subSectionId];
+    } else if (Object.values(dataModel.value[subSectionId]).some(Boolean)) {
+      data[subSectionId].push(dataModel.value[subSectionId]);
+    }
+  }
+
+  if (Object.keys(data).length === 0) return null;
+
+  return emit('update:modelValue', data);
+}
 
 // Methods
 
@@ -278,6 +362,7 @@ const expandSubSection = (subSectionId) => {
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   // .onboarding-experience-section__textarea
