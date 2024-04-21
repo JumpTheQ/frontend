@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import useAuthStore from '@/stores/auth'
 
 import NewApplication from '../views/NewApplication.vue'
-import HomeView from '../views/HomeView.vue'
+import DashboardView from '../views/DashboardView.vue'
+import OnboardingView from '../views/HomeView.vue'
 import LoginPage from '../views/LoginPage.vue'
 
 const router = createRouter({
@@ -10,47 +11,40 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
-      meta: {
-        requiresAuth: true
-      }
-    },
-    {
-      path: '/new-application',
-      name: 'new-application',
-      component: NewApplication,
-      meta: {
-        requiresAuth: true
-      }
+      name: 'dashboard',
+      component: DashboardView,
+      children: [
+        {
+          path: 'application/new',
+          name: 'new-application',
+          component: NewApplication
+        }
+      ]
     },
     {
       path: '/login',
       name: 'login',
       component: LoginPage
+    },
+
+    {
+      path: '/onboarding',
+      name: 'onboarding',
+      component: OnboardingView
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  const nextRouteRequiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+router.beforeEach((to) => {
   const { user, isAuthenticated } = useAuthStore()
 
-  // TODO: Check for user info and redirect to respective page if missing
-
-  if (nextRouteRequiresAuth && !isAuthenticated) {
-    next({ name: 'login' })
-  } else if (to.name !== 'login') {
-    console.log(to.name, isAuthenticated, user)
+  if (!isAuthenticated && to.name !== 'login') {
+    return { name: 'login' }
+  } else {
     const { about, ambitions } = user || {}
 
-    if (!about) next({ name: 'home', query: { section: 'about' } })
-    if (!ambitions) next({ name: 'home', query: { section: 'ambitions' } })
-
-    if (to.name !== 'new-application') next({ name: 'new-application' })
-    else next()
-  } else {
-    next()
+    if (!about) return { name: 'onboarding', query: { section: 'about' } }
+    if (!ambitions) return { name: 'onboarding', query: { section: 'ambitions' } }
   }
 })
 
