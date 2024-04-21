@@ -76,7 +76,7 @@ export default defineStore('auth', {
           start_date: format(startDate, 'yyyy-MM-dd')
         }
         console.log(data)
-        const { data: response } = authAxios.post('/course', data)
+        const { data: response } = await authAxios.post('/course', data)
         this.experiences.push(response.data)
       }
     },
@@ -111,7 +111,7 @@ export default defineStore('auth', {
           level
         }
         console.log(data)
-        const { data: response } = authAxios.post('/language', data)
+        const { data: response } = await authAxios.post('/language', data)
         this.languages.push(response.data)
       }
     },
