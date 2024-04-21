@@ -43,6 +43,7 @@ import Stepper from 'primevue/stepper';
 import StepperPanel from 'primevue/stepperpanel';
 
 import OnboardingSection from './OnboardingSection.vue';
+import OnboardingExperienceSection from './OnboardingExperienceSection.vue';
 
 const { user, updateUserData } = useAuthStore();
 
@@ -98,7 +99,7 @@ const steps = computed(() => [
   },
   {
     content: {
-      component: 'div',
+      component: OnboardingExperienceSection,
       props: {
         title: 'Title',
         disclaimer: 'disclaimer',
@@ -204,6 +205,7 @@ const onNextButtonClick = (stepId) => {
 
   .p-stepper-panels {
     @apply mt-28;
+    background: transparent;
   }
 
   .p-stepper-separator {

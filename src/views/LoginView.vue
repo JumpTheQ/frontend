@@ -14,17 +14,22 @@ import { onMounted, onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import authAxios from '@/shared/axios/auth-axios';
+
 import useAuthStore from '@/stores/auth';
-
-// import DefaultLayout from '@/layouts/DefaultLayout.vue';
-
-const router = useRouter();
-const store = useAuthStore();
 
 import Button from 'primevue/button';
 
-const url = ref('');
+// Store
 
+const authStore = useAuthStore();
+
+// Router
+
+const router = useRouter();
+
+// State
+
+const url = ref('');
 
 onBeforeMount(() => {
   const params = new URLSearchParams(window.location.search)
@@ -34,7 +39,7 @@ onBeforeMount(() => {
 
     authAxios.post('/auth/linkedin/callback', { code })
       .then(async () => {
-        await store.fetchUserData();
+        await authStore.fetchUserData();
 
         router.push('/');
       })

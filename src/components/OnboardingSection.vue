@@ -1,27 +1,23 @@
 <template>
-  <div class="about-section">
-    <h2 class="about-section__title">
+  <div class="onboarding-section">
+    <h2 class="onboarding-section__title">
       {{ title }}
     </h2>
-    <p class="about-section__disclaimer">
+    <p class="onboarding-section__disclaimer">
       {{ disclaimer }}
     </p>
-    <Card>
-      <template #content>
-        <Textarea
-          v-model="value"
-          rows="8"
-          @keyup.shift.enter.prevent="fireNextStepEvent"
-        />
-      </template>
-    </Card>
+    <Textarea
+      class="input onboarding-section__textarea"
+      v-model="value"
+      auto-resize
+      @keyup.shift.enter.prevent="fireNextStepEvent"
+    />
   </div>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 
-import Card from 'primevue/card';
 import Textarea from 'primevue/textarea';
 
 const props = defineProps({
@@ -54,41 +50,28 @@ const fireNextStepEvent = () => { };
 </script>
 
 <style lang="scss">
-.about-section {
-  .about-section__disclaimer {
-    margin: 0;
+.onboarding-section {
+
+  // .onboarding-section__disclaimer
+  &__disclaimer {
     margin-top: 11px;
     font-size: $font-size-md;
     font-weight: $font-weight-regular;
-    margin-bottom: 8px;
   }
 
-  .about-section__title {
-    margin: 0;
+  // .onboarding-section__textarea
+  &__textarea {
+    margin-top: 18px;
+    min-height: 280px;
+    max-height: 300px;
+
+    resize: none;
+  }
+
+  // .onboarding-section__title
+  &__title {
     font-size: $font-size-lg;
     font-weight: $font-weight-bold;
-    margin-bottom: 8px;
-  }
-
-  .p-inputtextarea {
-    width: 100%;
-    resize: none;
-    padding: 8px;
-  }
-
-  .p-inputtext {
-    box-shadow: none;
-  }
-
-  .p-card {
-    margin-top: 18px;
-
-    .p-card-body {
-      padding: 0;
-    }
-
-    box-shadow: 0px 2px 30px 0px #0000001A;
-    padding: 16px;
   }
 }
 </style>

@@ -47,6 +47,34 @@ body,
   }
 }
 
+.input.p-calendar {
+  width: 100%;
+
+  input {
+    padding: 10px 16px;
+
+    color: $color-text;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+    background-color: $color-white;
+
+    border: 1px solid $color-light-gray;
+    border-radius: $base-border-radius;
+    outline: none;
+
+    &::placeholder {
+      color: $color-placeholder;
+    }
+
+    &:focus {
+      border-color: $color-primary;
+    }
+  }
+
+  td span.p-highlight {
+  }
+}
+
 .labeled-input > .input {
   margin-top: 16px;
 }

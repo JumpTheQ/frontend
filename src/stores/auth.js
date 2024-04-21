@@ -5,8 +5,6 @@ export default defineStore('auth', {
   state: () => {
     const localStorageUser = JSON.parse(localStorage.getItem('user'))
 
-    // /user/userId --> update user data
-
     return {
       user: localStorageUser ?? null
     }
