@@ -70,9 +70,35 @@ body,
       border-color: $color-primary;
     }
   }
+}
 
-  td span.p-highlight {
+.input.p-dropdown {
+  width: 100%;
+
+  .p-inputtext {
+    padding: 10px 16px;
+
+    color: $color-text;
+    font-size: $font-size-md;
+    font-weight: $font-weight-regular;
+
+    border: 1px solid $color-light-gray;
+    border-radius: $base-border-radius;
+    outline: none;
+
+    &::placeholder {
+      color: $color-placeholder;
+    }
   }
+
+  &.p-inputwrapper-focus {
+    outline: none;
+    border: 1px solid $color-primary;
+  }
+}
+
+.p-dropdown-item.p-focus {
+  background-color: $color-secondary;
 }
 
 .labeled-input > .input {
