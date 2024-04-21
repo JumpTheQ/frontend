@@ -1,11 +1,20 @@
 <template>
   <div class="login-page">
-    <a :href="url">
-      <Button
-        label="LinkedIn Log In"
-        icon="pi pi-linkedin"
-      />
-    </a>
+    <div class="flex items-center w-full mx-6">
+      <img src="@/assets/images/login.png" alt="">
+      <div class="flex items-center justify-center flex-col w-full">
+        <img src="@/assets/images/login-illustration.png" alt="" class="max-w-xs">
+        <a :href="url">
+          <Button
+            :loading="loading"
+            class="button mt-8"
+            label="LinkedIn Log In"
+            icon="pi pi-linkedin"
+          />
+        </a>
+        <p class="mt-8 w-96 text-center">By sign in with LinkedIn you are providing us with information such as name, email, and photo. Your data will not be shared with third party entities.</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,18 +40,20 @@ const router = useRouter();
 
 const url = ref('');
 
-onBeforeMount(() => {
+const loading = ref(false)
+
+onBeforeMount(async () => {
   const params = new URLSearchParams(window.location.search)
 
   if (params.get('callback') === 'linkedin' && params.has('code')) {
     const code = params.get('code');
 
-    authAxios.post('/auth/linkedin/callback', { code })
-      .then(async () => {
-        await authStore.fetchUserData();
+    loading.value = true
+    await authAxios.post('/auth/linkedin/callback', { code })
+    await authStore.fetchUserData();
 
-        router.push('/');
-      })
+    loading.value = false
+    router.push('/');
   }
 });
 

@@ -27,15 +27,14 @@ export default defineStore('auth', {
       localStorage.setItem('user', JSON.stringify(payload))
     },
 
-    fetchUserData() {
-      authAxios.get('/auth/me').then(({ data: responseData }) => {
-        const { data } = responseData
+    async fetchUserData() {
+      const { data: response } = await authAxios.get('/auth/me')
+      const { data } = response || {}
 
-        this.storeUser(data)
-      })
+      this.storeUser(data)
     },
 
-    updateUserData(payload) {
+    async updateUserData(payload) {
       const { about, ambitions, experiences, courses, languages, skills, userId } = payload || {}
 
       if (!userId) console.error('Missing userId in payload')
@@ -46,24 +45,24 @@ export default defineStore('auth', {
       if (typeof ambitions !== 'undefined') data.ambitions = ambitions
       if (typeof skills !== 'undefined') data.skills = skills
 
-      authAxios.patch(`/user/${userId}`, data).then(({ data: responseData }) => {
-        this.storeUser(responseData.data)
-        console.log(payload)
-        if (Array.isArray(experiences) && experiences.length) {
-          this.addUserExperiences({ experiences })
-        }
+      const { data: response } = await authAxios.patch(`/user/${userId}`, data)
 
-        if (Array.isArray(courses) && courses.length) {
-          this.addUserCourses({ courses })
-        }
+      this.storeUser(response.data)
 
-        if (Array.isArray(languages) && languages.length) {
-          this.addUserLanguages({ languages })
-        }
-      })
+      if (Array.isArray(experiences) && experiences.length) {
+        await this.addUserExperiences({ experiences })
+      }
+
+      if (Array.isArray(courses) && courses.length) {
+        await this.addUserCourses({ courses })
+      }
+
+      if (Array.isArray(languages) && languages.length) {
+        await this.addUserLanguages({ languages })
+      }
     },
 
-    addUserCourses(payload) {
+    async addUserCourses(payload) {
       const { courses } = payload || {}
 
       for (const course of courses) {
@@ -77,13 +76,12 @@ export default defineStore('auth', {
           start_date: format(startDate, 'yyyy-MM-dd')
         }
         console.log(data)
-        authAxios.post('/course', data).then(({ data: responseData }) => {
-          this.experiences.push(responseData.data)
-        })
+        const { data: response } = authAxios.post('/course', data)
+        this.experiences.push(response.data)
       }
     },
 
-    addUserExperiences(payload) {
+    async addUserExperiences(payload) {
       const { experiences } = payload || {}
 
       for (const experience of experiences) {
@@ -97,13 +95,12 @@ export default defineStore('auth', {
           title
         }
         console.log(data)
-        authAxios.post('/experience', data).then(({ data: responseData }) => {
-          this.courses.push(responseData.data)
-        })
+        const { data: response } = await authAxios.post('/experience', data)
+        this.courses.push(response.data)
       }
     },
 
-    addUserLanguages(payload) {
+    async addUserLanguages(payload) {
       const { languages } = payload || {}
 
       for (const language of languages) {
@@ -114,9 +111,8 @@ export default defineStore('auth', {
           level
         }
         console.log(data)
-        authAxios.post('/language', data).then(({ data: responseData }) => {
-          this.languages.push(responseData.data)
-        })
+        const { data: response } = authAxios.post('/language', data)
+        this.languages.push(response.data)
       }
     },
 

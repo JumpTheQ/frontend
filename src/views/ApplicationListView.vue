@@ -9,7 +9,7 @@
         />
       </router-link>
     </div>
-    <div class="bg-white rounded-lg overflow-hidden">
+    <div class="bg-white rounded-lg overflow-hidden" >
       <div v-if="loading" class="p-4">
         <Skeleton class="mb-2"></Skeleton>
         <Skeleton width="10rem" class="mb-2"></Skeleton>

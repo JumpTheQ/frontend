@@ -40,6 +40,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router'
 
 import useAuthStore from '@/stores/auth';
 
@@ -52,6 +53,7 @@ import OnboardingSection from './OnboardingSection.vue';
 import OnboardingExperienceSection from './OnboardingExperienceSection.vue';
 
 const { user, updateUserData } = useAuthStore();
+const router = useRouter()
 
 // State
 
@@ -130,16 +132,17 @@ const steps = computed(() => [
 
 // Methods
 
-const submitData = () => {
+const submitData = async () => {
   const data = {
     userId: user.id,
     ...payload.value
   };
 
-  updateUserData(data);
+  await updateUserData(data);
+  router.push('/')
 };
 
-const onNextButtonClick = (stepId) => {
+const onNextButtonClick = async (stepId) => {
   if (isLastStep.value) {
 
     if (Array.isArray(experiencesInput.value.experiences) && experiencesInput.value.experiences.length) {
@@ -158,7 +161,7 @@ const onNextButtonClick = (stepId) => {
       skills.value = experiencesInput.value.skills;
     }
 
-    submitData();
+    await submitData();
     return;
   }
 
