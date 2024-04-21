@@ -89,7 +89,7 @@ const onPromptSubmit = () => {
   &__chat-bubble {
     background-color: $color-primary;
     padding: 8px;
-    border-radius: 10px;
+    border-radius: $base-border-radius;
     color: $color-white;
     width: fit-content;
 
@@ -150,7 +150,7 @@ const onPromptSubmit = () => {
     resize: none;
 
     border: 1px solid $color-light-gray;
-    border-radius: 10px;
+    border-radius: $base-border-radius;
 
     &::placeholder {
       color: $color-placeholder;
