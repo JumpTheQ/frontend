@@ -2,9 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import useAuthStore from '@/stores/auth'
 
-import ApplicationResultsView from '../views/ApplicationResultsView.vue'
-import NewApplication from '../views/NewApplication.vue'
 import DashboardView from '../views/DashboardView.vue'
+import ApplicationListView from '@/views/ApplicationListView.vue'
+import ApplicationItemView from '../views/ApplicationItemView.vue'
+import ApplicationNewView from '../views/ApplicationNewView.vue'
 import OnboardingView from '../views/OnboardingView.vue'
 import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
@@ -16,16 +17,22 @@ const router = createRouter({
       path: '/',
       name: 'dashboard',
       component: DashboardView,
+      redirect: '/applications',
       children: [
         {
-          path: 'application/new',
-          name: 'new-application',
-          component: NewApplication
+          path: 'applications',
+          name: 'application-list',
+          component: ApplicationListView
         },
         {
-          path: 'application/:id',
-          name: 'application',
-          component: ApplicationResultsView
+          path: 'applications/new',
+          name: 'application-new',
+          component: ApplicationNewView
+        },
+        {
+          path: 'applications/:id',
+          name: 'application-view',
+          component: ApplicationItemView
         },
         {
           path: 'profile',

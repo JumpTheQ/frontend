@@ -12,6 +12,8 @@ export default defineStore('applications', {
   getters: {
     applicationById: (state) => (id) => state.records[id],
 
+    rows: (state) => state.ids.map((id) => state.records[id]),
+
     renderedCoverLetterByApplicationId: (state) => (id) => state.records[id]?.coverLetter?.rendered,
 
     renderedResumeByApplicationId: (state) => (id) => state.records[id]?.resume?.rendered
@@ -34,6 +36,15 @@ export default defineStore('applications', {
         this.ids.push(data.id)
 
         return data.id
+      })
+    },
+
+    async fetchApplications() {
+      const { data: response } = await authAxios.get(`application/`)
+
+      this.ids = response.data.map((record) => {
+        this.records[record.id] = record
+        return record.id
       })
     },
 
