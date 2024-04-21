@@ -31,7 +31,10 @@
             'chat-window__chat-bubble--ai-generated': prompt.isAiGenerated,
           }"
         >
-          <div class="quote" v-if="prompt.promptable">{{ prompt.promptable.content.substring(0, 50) }}</div>
+          <div class="quote" v-if="prompt.promptable">
+            {{ prompt.promptable.content.substring(0, 50) }}
+            <span v-if="prompt.promptable.content.length > 50">(...)</span>
+          </div>
           {{ prompt.content }}
         </div>
       </div>
@@ -41,7 +44,8 @@
         <div class="absolute bottom-0 mb-28 z-10" v-if="activeSection">
           <span class="absolute right-0 top-0 mr-3 mt-1.5 cursor-pointer z-20" @click="cancelActiveSection">x</span>
           <div class="chat-window__active-section">
-            {{ activeSection.content }}
+            {{ activeSection.content.substring(0, 100) }}
+            <span v-if="activeSection.content.length > 100">(...)</span>
           </div>
         </div>
         <Textarea
