@@ -20,6 +20,7 @@
 import { computed, ref, watch } from 'vue';
 
 import useApplicationsStore from '@/stores/applications';
+import usePromptStore from '@/stores/prompt.js'
 
 import Card from 'primevue/card';
 
@@ -38,6 +39,7 @@ const props = defineProps({
 // Store
 
 const applicationStore = useApplicationsStore();
+const promptStore = usePromptStore()
 
 // State
 
@@ -52,6 +54,11 @@ const renderedCoverLetter = computed(() => applicationStore.renderedCoverLetterB
 const handleContentClick = (event) => {
   const { target } = event;
   const targetSectionId = target.getAttribute('data-section-id');
+
+  promptStore.setActiveSection({
+    id: targetSectionId,
+    content: target.innerHTML
+  });
 
   if (selectedSectionId.value) {
     const previousTarget = document.querySelector(`[data-section-id="${selectedSectionId.value}"]`);

@@ -46,7 +46,7 @@
       <h2 class="label application-results__chat-label">
         Chat
       </h2>
-      <ChatWindow class="application-results__chat-window" />
+      <ChatWindow class="application-results__chat-window" :application-id="applicationId" :promptable="promptable" />
     </div>
   </div>
 </template>
@@ -101,6 +101,13 @@ const resumeId = computed(() => application.value?.resume?.id);
 const isCvTabActive = computed(() => tabs.value[activeIndex.value].id === 'cv');
 
 const isLetterTabActive = computed(() => tabs.value[activeIndex.value].id === 'letter');
+
+const promptable = computed(() => {
+  return {
+    id: isCvTabActive.value ? resumeId.value : coverLetterId.value,
+    type: isCvTabActive.value ? 'App\\Models\\Resume' : 'App\\Models\\CoverLetter'
+  }
+});
 
 // Methods
 

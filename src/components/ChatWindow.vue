@@ -5,78 +5,121 @@
         class="chat-window__conversation"
         ref="chatContainer"
       >
+        <div v-if="loading" class="w-full">
+          <Skeleton class="mb-2"></Skeleton>
+          <Skeleton width="10rem" class="mb-2"></Skeleton>
+          <Skeleton width="5rem" class="mb-2"></Skeleton>
+          <Skeleton height="2rem" class="mb-2"></Skeleton>
+          <Skeleton width="10rem" height="4rem"></Skeleton>
+        </div>
         <div
-          v-for="bubble, index in mocked"
-          :key="`bubble-${index}`"
+          v-else
           class="chat-window__chat-bubble"
           :class="{
-            'chat-window__chat-bubble--ai-generated': bubble.isAiGenerated,
+            'chat-window__chat-bubble--ai-generated': true,
           }"
         >
-          {{ bubble.message }}
+          There were the artifacts I've generated for you fully customized for this job offer! <br>
+          <br>
+          Feel free to iterate on top of them!
+        </div>
+        <div
+          v-for="prompt in prompts"
+          :key="`bubble-${prompt.id}`"
+          class="chat-window__chat-bubble"
+          :class="{
+            'chat-window__chat-bubble--ai-generated': prompt.isAiGenerated,
+          }"
+        >
+          <div class="quote" v-if="prompt.promptable">{{ prompt.promptable.content.substring(0, 50) }}</div>
+          {{ prompt.content }}
         </div>
       </div>
     </template>
     <template #footer>
-      <Textarea
-        class="input chat-window__textarea"
-        v-model="userPrompt"
-        placeholder="Type a message and press Shift + Enter to send"
-        @keydown.shift.enter.prevent="onPromptSubmit"
-      />
+      <div class="relative">
+        <div class="absolute bottom-0 mb-28 z-10" v-if="activeSection">
+          <span class="absolute right-0 top-0 mr-3 mt-1.5 cursor-pointer z-20" @click="cancelActiveSection">x</span>
+          <div class="chat-window__active-section">
+            {{ activeSection.content }}
+          </div>
+        </div>
+        <Textarea
+          class="input chat-window__textarea"
+          v-model="userPrompt"
+          placeholder="Type a message and press Shift + Enter to send"
+          @keydown.meta.enter.prevent="onPromptSubmit"
+          @keydown.ctrl.enter.prevent="onPromptSubmit"
+        />
+      </div>
     </template>
   </Card>
 </template>
 
 <script setup>
-import { nextTick, ref, watch } from 'vue';
+import { computed, ref, onMounted } from 'vue'
+import usePromptStore from '@/stores/prompt.js'
 
 import Card from 'primevue/card';
 import Textarea from 'primevue/textarea';
+import Skeleton from 'primevue/skeleton'
 
+const props = defineProps({
+  applicationId: {
+    type: String,
+    default: null
+  },
+  promptable: {
+    type: Object,
+    default: () => {}
+  }
+})
 
-// Mocked
-
-const mocked = Array.from({ length: 10 }, (_, i) => ({
-  message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates eius quisquam natus, mollitia nemo quasi delectus dolore corporis placeat harum dicta molestiae laborum veniam neque nihil vero incidunt! Tenetur, quis.',
-  isAiGenerated: i && i % 2 === 0,
-}));
+const promptStore = usePromptStore()
 
 // State
 
 const chatContainer = ref(null);
 
-const prompts = ref(mocked);
+const prompts = computed(() => promptStore.applicationPrompts(props.applicationId) ?? []);
+const activeSection = computed(() => promptStore.activeSection)
 
+const loading = ref(false)
 const userPrompt = ref('');
 
 // Methods
 
-const onPromptSubmit = () => {
-  if (!userPrompt.value) return;
+const onPromptSubmit = async () => {
+  const payload = {
+    content: userPrompt.value,
+    promptable_type: activeSection.value ? 'App\\Models\\Section' : props.promptable.type,
+    promptable_id: activeSection.value ? activeSection.value.id : props.promptable.id
+  }
 
-  mocked.push({
-    message: userPrompt.value,
-    isAiGenerated: false,
-  })
-
-  prompts.value = JSON.parse(JSON.stringify(mocked))
-  userPrompt.value = '';
+  await promptStore.createPrompt(props.applicationId, payload)
 };
 
 const scrollToBottom = () => {
   if (chatContainer.value) chatContainer.value.scrollTo(0, chatContainer.value.scrollHeight);
 };
 
+const cancelActiveSection = () => {
+  promptStore.setActiveSection(null);
+}
+
+onMounted(async () => {
+  loading.value = true
+  await promptStore.fetchPrompts(props.applicationId)
+  loading.value = false
+})
 // Watchers
 
-watch(
+/* watch(
   () => prompts.value,
   () => {
     nextTick(scrollToBottom);
-  },
-  { immediate: true }
-);
+  }
+); */
 </script>
 
 <style lang="scss">
@@ -130,6 +173,44 @@ watch(
     height: 100%;
     max-height: calc(100vh - 240px);
     overflow-y: scroll;
+  }
+
+  &__active-section {
+    background-color: #F2E9F4;
+    padding: 8px 8px 8px 24px;
+    border-radius: $base-border-radius;
+    opacity: 0.8;
+    position: relative;
+    &::before {
+      content: 'Highlighted section';
+      color: #791E94;
+      font-weight: 600;
+      @apply block -ml-3 mb-2;
+    }
+    &::after {
+      content: ' ';
+      display: block;
+      top: 46px;
+      bottom: 12px;
+      left: 12px;
+      width: 2px;
+      background-color: #791E94;
+      position: absolute;
+    }
+  }
+
+  .quote {
+    @apply relative opacity-50 mb-2 pl-2;
+    &::before {
+      content: ' ';
+      display: block;
+      background-color: #fff;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+    }
   }
 
   // .chat-window__textarea

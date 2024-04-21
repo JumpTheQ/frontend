@@ -20,6 +20,7 @@ import { computed, watch } from 'vue';
 import useApplicationsStore from '@/stores/applications';
 
 import Card from 'primevue/card';
+import usePromptStore from '@/stores/prompt.js'
 
 const props = defineProps({
   applicationId: {
@@ -36,6 +37,7 @@ const props = defineProps({
 // Store
 
 const applicationStore = useApplicationsStore();
+const promptStore = usePromptStore
 
 // Computed
 
