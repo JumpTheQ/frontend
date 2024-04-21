@@ -1,17 +1,41 @@
 <template>
-  <DefaultLayout class="new-application">
-    <h1>New application</h1>
-
-    <label for="">Position</label>
-    <InputText v-model="name" />
-
-    <label for="">Paste the position here, please</label>
-    <Textarea v-model="description" />
+  <div class="new-application">
+    <h1 class="page-title">
+      New application
+    </h1>
+    <div class="labeled-input">
+      <label
+        class="label"
+        for="application-name"
+      >
+        What is the position you are applying to?
+      </label>
+      <InputText
+        class="input"
+        v-model="name"
+        id="application-name"
+      />
+    </div>
+    <div class="labeled-input">
+      <label
+        class="label"
+        for="application-description"
+      >
+        Paste the entire job description here, please.
+      </label>
+      <Textarea
+        class="input new-application__description-input"
+        v-model="description"
+        id="application-description"
+      />
+    </div>
     <Button
+      class="button new-application__submit-button"
+      icon="pi pi-sparkles"
       label="Create application"
       @click="submitApplication"
     />
-  </DefaultLayout>
+  </div>
 </template>
 
 <script setup>
@@ -19,11 +43,10 @@ import { computed, ref } from 'vue';
 
 import useApplicationsStore from '@/stores/applications';
 
-import DefaultLayout from '@/layouts/DefaultLayout.vue';
-
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
+
 
 const { createApplication } = useApplicationsStore();
 
@@ -44,14 +67,26 @@ const payload = computed(() => {
 const submitApplication = () => {
   if (!payload.value) return;
 
-  console.log(payload.value);
-
   createApplication(payload.value);
 }
 </script>
 
 <style lang="scss" scoped>
 .new-application {
-  @apply flex flex-col gap-4;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  // .new-application__description-input
+  &__description-input {
+    height: 440px;
+
+    resize: none;
+  }
+
+  // .new-application__submit-button
+  &__submit-button {
+    align-self: flex-end;
+  }
 }
 </style>
