@@ -10,13 +10,14 @@
         v-if="renderedCoverLetter"
         class="cover-letter-card__content"
         v-html="renderedCoverLetter"
+        @click="handleContentClick"
       />
     </template>
   </Card>
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import useApplicationsStore from '@/stores/applications';
 
@@ -38,9 +39,33 @@ const props = defineProps({
 
 const applicationStore = useApplicationsStore();
 
+// State
+
+const selectedSectionId = ref(null);
+
 // Computed
 
 const renderedCoverLetter = computed(() => applicationStore.renderedCoverLetterByApplicationId(props.applicationId));
+
+// Methods
+
+const handleContentClick = (event) => {
+  const { target } = event;
+  const targetSectionId = target.getAttribute('data-section-id');
+
+  if (selectedSectionId.value) {
+    const previousTarget = document.querySelector(`[data-section-id="${selectedSectionId.value}"]`);
+
+    previousTarget.classList.remove('cover-letter-card__content-section--active');
+  }
+
+  if (selectedSectionId.value === targetSectionId) {
+    selectedSectionId.value = null;
+  } else {
+    target.classList.add('cover-letter-card__content-section--active');
+    selectedSectionId.value = target.getAttribute('data-section-id');
+  }
+}
 
 // Watchers
 
@@ -67,23 +92,47 @@ watch(
     padding: 0 8px;
     font-size: $font-size-md;
     font-weight: $font-weight-regular;
-
-
   }
 
-  // .cover-letter-card__content p
+  // .cover-letter-card__content
   &__content {
+
+    // .cover-letter-card__content p
     p {
+      position: relative;
+      cursor: pointer;
       margin-top: 16px;
       color: $color-text;
       font-size: $font-size-md;
       font-weight: $font-weight-regular;
 
-      &:hover {
+      // .cover-letter-card__content p:hover
+      // .cover-letter-card__content p.cover-letter-card__content-section--active
+      &:hover,
+      &.cover-letter-card__content-section--active {
+        width: calc(100% + 48px);
         background-color: $color-secondary;
+        margin-left: -24px;
+        padding: 0 24px;
+
+        &::after {
+          content: url('@/assets/icons/stars.svg');
+          position: absolute;
+          top: 0;
+          right: 20px;
+
+          transform: translateY(-50%);
+
+          width: 40px;
+          height: 40px;
+
+          border: 1px solid $color-primary;
+          background-color: $color-secondary;
+          border-radius: 50%;
+        }
       }
 
-      // .cover-letter-card__content-section:not(:first-child)
+      // .cover-letter-card__content p:not(:first-child)
       &:not(:first-child) {
         margin-top: 8px;
       }
