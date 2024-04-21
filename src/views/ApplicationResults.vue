@@ -78,7 +78,7 @@ const route = useRoute();
 
 // State
 
-const activeIndex = ref(1);
+const activeIndex = ref(0);
 
 const tabs = ref([
   {
@@ -190,6 +190,7 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 24px;
 
     margin-top: 30px;
   }
