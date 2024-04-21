@@ -40,6 +40,7 @@
 
 <script setup>
 import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import useApplicationsStore from '@/stores/applications';
 
@@ -48,7 +49,15 @@ import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 
 
+// Store
+
 const { createApplication } = useApplicationsStore();
+
+// Router
+
+const router = useRouter();
+
+// State
 
 const description = ref('');
 const name = ref('');
@@ -67,7 +76,13 @@ const payload = computed(() => {
 const submitApplication = () => {
   if (!payload.value) return;
 
-  createApplication(payload.value);
+  createApplication(payload.value)
+    .then((id) => {
+      description.value = '';
+      name.value = '';
+
+      router.push({ name: 'application', params: { id } })
+    });
 }
 </script>
 

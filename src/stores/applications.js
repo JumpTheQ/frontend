@@ -9,7 +9,13 @@ export default defineStore('applications', {
     count: 0
   }),
 
-  getters: {},
+  getters: {
+    applicationById: (state) => (id) => state.records[id],
+
+    renderedCoverLetterByApplicationId: (state) => (id) => state.records[id]?.coverLetter?.rendered,
+
+    renderedResumeByApplicationId: (state) => (id) => state.records[id]?.resume?.rendered
+  },
 
   actions: {
     createApplication(payload) {
@@ -21,11 +27,60 @@ export default defineStore('applications', {
 
       if (!Object.keys(data).length) return
 
-      authAxios.post('application', data).then(({ data: responseData }) => {
+      return authAxios.post('application', data).then(({ data: responseData }) => {
         const { data } = responseData || {}
 
         this.records[data.id] = data
         this.ids.push(data.id)
+
+        return data.id
+      })
+    },
+
+    fetchApplication(id) {
+      console.log('fetching application')
+      authAxios.get(`application/${id}`).then(({ data: responseData }) => {
+        const { data } = responseData || {}
+
+        this.records[id] = data
+        if (!this.ids.includes(id)) this.ids.push(id)
+
+        this.fetchCoverLetter(id)
+        this.fetchResume(id)
+      })
+    },
+
+    fetchCoverLetter(id) {
+      authAxios.get(`application/${id}/coverLetter`).then(({ data: responseData }) => {
+        const { data } = responseData || {}
+
+        this.records[id].coverLetter = data
+      })
+    },
+
+    fetchRenderedCoverLetter(payload) {
+      const { applicationId, coverLetterId } = payload || {}
+      authAxios
+        .get(`application/${applicationId}/coverLetter/${coverLetterId}`)
+        .then(({ data }) => {
+          this.records[applicationId].coverLetter.rendered = data
+        })
+    },
+
+    fetchRenderedResume(payload) {
+      const { applicationId, resumeId } = payload || {}
+
+      authAxios.get(`application/${applicationId}/resume/${resumeId}`).then(({ data }) => {
+        console.log(data)
+        this.records[applicationId].resume.rendered = data
+      })
+    },
+
+    fetchResume(id) {
+      authAxios.get(`application/${id}/resume`).then(({ data: responseData }) => {
+        const { data } = responseData || {}
+
+        this.records[id].resume = data
       })
     }
   }
